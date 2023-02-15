@@ -5,21 +5,19 @@ import { Notify } from 'notiflix';
     
 const DEBOUNCE_DELAY = 300;
 
-
 const refs = {
-      input: document.getElementById('search-box'),
-      list: document.querySelector('.country-list'),
-      info: document.querySelector('.country-info'),
-    };
+ inputEl: document.getElementById('search-box'),
+ listEl: document.querySelector('.country-list'),
+ infoEl: document.querySelector('.country-info'),}
 
 const cleanMarkup = ref => (ref.innerHTML = '');
 
-const inputHandler = e => {
+const onInput = e => {
   const textInput = e.target.value.trim();
 
   if (!textInput) {
-    cleanMarkup(list;
-    cleanMarkup(info);
+    cleanMarkup(refs.listEl);
+    cleanMarkup(refs.infoEl);
     return;
   }
 
@@ -27,27 +25,27 @@ const inputHandler = e => {
     .then(data => {
       console.log(data);
       if (data.length > 10) {
-        Notify.info('Занадто багато співпадінь. Введіть більше інформації!');
+        Notify.info('Занадто багато співпадінь. Будь ласка, введіть більше інформації!');
         return;
       }
       renderMarkup(data);
     })
     .catch(err => {
-      cleanMarkup(list);
-      cleanMarkup(info);
-      Notify.failure('Така країна відсутня!');
+      cleanMarkup(refs.listEl);
+      cleanMarkup(refs.infoEl);
+      Notify.failure('Вибачте, така країна відсутня!');
     });
 };
 
 const renderMarkup = data => {
   if (data.length === 1) {
-    cleanMarkup(list);
+    cleanMarkup(refs.listEl);
     const markupInfo = createInfoMarkup(data);
-    info.innerHTML = markupInfo;
+    refs.infoEl.innerHTML = markupInfo;
   } else {
-    cleanMarkup(info);
+    cleanMarkup(refs.infoEl);
     const markupList = createListMarkup(data);
-    list.innerHTML = markupList;
+    refs.listEl.innerHTML = markupList;
   }
 };
 
@@ -72,4 +70,4 @@ const createInfoMarkup = data => {
   );
 };
 
-input.addEventListener('input', debounce(inputHandler, DEBOUNCE_DELAY));
+refs.inputEl.addEventListener('input', debounce(onInput, DEBOUNCE_DELAY));
